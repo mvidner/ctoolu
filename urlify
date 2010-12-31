@@ -1,6 +1,7 @@
 #! /usr/bin/env ruby
 require 'rubygems'
 require 'dbus'
+require 'gtk2'
 
 $patterns = [
             {
@@ -14,24 +15,53 @@ $patterns = [
               "url" => "https://features.opensuse.org/%s",
             },
            ]
+print $patterns.to_yaml
 
 def clipboard_changed(text)
   $patterns.each do |hash|
     match_data = hash["pattern"].match(text)
     if match_data
       puts hash["name"]
-      puts hash["url"] % match_data.captures
+      url_menu(hash["url"] % match_data.captures)
     end
   end
 end
 
+def url_klipper(url)
+  puts url
+  $klipper.setClipboardContents url # FIXME 1 how to disable, FIXME 2 avoid loop
+  $klipper.showKlipperManuallyInvokeActionMenu
+end
+
+# http://ruby-gnome2.sourceforge.jp/hiki.cgi?Gtk%3A%3AMenu
+def url_menu(url)
+  button = 1
+  $menu.popup(nil, nil, button, 0)
+end
+
+menu = Gtk::Menu.new
+menu.append(Gtk::MenuItem.new("Test1"))
+menu.append(Gtk::MenuItem.new("Test2"))
+menu.show_all
+$menu = menu
+
 bus = DBus::SessionBus.instance
+
+klipper_s = bus["org.kde.klipper"]
+klipper_o = klipper_s.object "/klipper"
+klipper_o.introspect
+$klipper = klipper_o["org.kde.klipper.klipper"]
 
 mr = DBus::MatchRule.new.from_s "type='signal',interface='net.vidner.ClipboardRelay',member='Changed',path='/net/vidner/ClipboardRelay/Clipboard'"
 bus.add_match(mr) do |msg|
   clipboard_changed(msg.params[0])
 end
 
-main = DBus::Main.new
-main << bus
-main.run
+if false
+  main = DBus::Main.new
+  main << bus
+  main.run
+else
+  bus.glibize
+  Gtk.main
+end
