@@ -1,0 +1,37 @@
+#! /usr/bin/env ruby
+require 'rubygems'
+require 'dbus'
+
+$patterns = [
+            {
+              "name" => "BNC",
+              "pattern" => /bnc ?#?(\d+)/i,
+              "url" => "https://bugzilla.novell.com/show_bug.cgi?id=%s",
+            },
+            {
+              "name" => "FATE",
+              "pattern" => /fate ?#?(\d+)/i,
+              "url" => "https://features.opensuse.org/%s",
+            },
+           ]
+
+def clipboard_changed(text)
+  $patterns.each do |hash|
+    match_data = hash["pattern"].match(text)
+    if match_data
+      puts hash["name"]
+      puts hash["url"] % match_data.captures
+    end
+  end
+end
+
+bus = DBus::SessionBus.instance
+
+mr = DBus::MatchRule.new.from_s "type='signal',interface='net.vidner.ClipboardRelay',member='Changed',path='/net/vidner/ClipboardRelay/Clipboard'"
+bus.add_match(mr) do |msg|
+  clipboard_changed(msg.params[0])
+end
+
+main = DBus::Main.new
+main << bus
+main.run
