@@ -1,41 +1,42 @@
+#! /usr/bin/env python
+# relays Clipboard and Primary changes over DBus
 import pygtk
 pygtk.require('2.0')
 import gtk
+import dbus
+import dbus.service
 
-listeners = { "clipboard": [], "primary": [] }
+# must be set before we ask for signals
+from dbus.mainloop.glib import DBusGMainLoop
+DBusGMainLoop(set_as_default=True)
 
-def notify_listeners(type, text):
-	for listener in listeners[type]:
-		listener(text)
+import gobject
+loop = gobject.MainLoop()
 
-def add_listener(type, listener):
-	listeners[type].append(listener)
+class ClipboardRelay(dbus.service.Object):
+	def __init__(self, path, gtk_id):
+		dbus.service.Object.__init__(self, dbus.SessionBus(), path)
+		self.gtk_clipboard = gtk.clipboard_get(gtk_id)
+		self.gtk_clipboard.connect("owner-change", self.owner_change)
+		self.gtk_clipboard.request_text(self.callback)
 
-def callback_clipboard(clipboard, text, data):
-	notify_listeners("clipboard", text)
-def callback_primary(clipboard, text, data):
-	notify_listeners("primary", text)
+	def owner_change(self, gtk_clipboard, event, data=None):
+		# print "OC c: %r e: %r d: %r" % (gtk_clipboard, event, data)
+		gtk_clipboard.request_text(self.callback)
 
-def __owner_change_clipboard(clipboard, event, data=None):
-	selection["clipboard"].request_text(callback_clipboard)
-def __owner_change_primary(clipboard, event, data=None):
-	selection["primary"].request_text(callback_primary)
+	def callback(self, gtk_clipboard, text, data):
+		# print "CB c: %r t: %r d: %r" % (clipboard, text, data)
+		self.Changed(text)
 
-selection = {}
+	@dbus.service.signal(dbus_interface='net.vidner.ClipboardRelay',
+			     signature='s')
+	def Changed(self, value):
+		print "*** %s" % value
+		pass
 
-if True:
-	selection["clipboard"] = gtk.clipboard_get(gtk.gdk.SELECTION_CLIPBOARD)
-	selection["clipboard"].request_text(callback_clipboard)
-	selection["clipboard"].connect("owner-change", __owner_change_clipboard)
-
-if True:
-	selection["primary"] = gtk.clipboard_get(gtk.gdk.SELECTION_PRIMARY)
-	selection["primary"].request_text(callback_primary)
-	selection["primary"].connect("owner-change", __owner_change_primary)
-
-def printer(arg):
-	print arg
-
-add_listener("clipboard", printer)
-
-gtk.main()
+#gtk.main()
+clipboard = ClipboardRelay("/net/vidner/ClipboardRelay/Clipboard",
+			   gtk.gdk.SELECTION_CLIPBOARD)
+primary   = ClipboardRelay("/net/vidner/ClipboardRelay/Primary",
+			   gtk.gdk.SELECTION_PRIMARY)
+loop.run()
