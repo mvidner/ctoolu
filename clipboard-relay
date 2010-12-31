@@ -31,7 +31,7 @@ class ClipboardRelay(dbus.service.Object):
 	@dbus.service.signal(dbus_interface='net.vidner.ClipboardRelay',
 			     signature='s')
 	def Changed(self, value):
-		print "*** %s" % value
+		#print "*** %s" % value
 		pass
 
 #gtk.main()
