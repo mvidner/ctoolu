@@ -1,42 +1,45 @@
-#! /usr/bin/env python
+#! /usr/bin/env ruby
 # relays Clipboard and Primary changes over DBus
-import pygtk
-pygtk.require('2.0')
-import gtk
-import dbus
-import dbus.service
+require 'rubygems'
+require 'dbus'
+require 'gtk2'
 
-# must be set before we ask for signals
-from dbus.mainloop.glib import DBusGMainLoop
-DBusGMainLoop(set_as_default=True)
+class ClipboardRelay < DBus::Object
+  def initialize(path, gtk_id)
+    super(path)
+    @last_text = nil
+    @gtk_clipboard = Gtk::Clipboard.get(gtk_id)
+    @gtk_clipboard.signal_connect("owner-change") do |clipboard, event|
+      owner_change(clipboard)
+    end
+    @gtk_clipboard.request_text { |clipboard, text| got_text(text) }
+  end
 
-import gobject
-loop = gobject.MainLoop()
+  def owner_change(a_clipboard)
+    a_clipboard.request_text { |clipboard, text| got_text(text) }
+  end
 
-class ClipboardRelay(dbus.service.Object):
-	def __init__(self, path, gtk_id):
-		dbus.service.Object.__init__(self, dbus.SessionBus(), path)
-		self.gtk_clipboard = gtk.clipboard_get(gtk_id)
-		self.gtk_clipboard.connect("owner-change", self.owner_change)
-		self.gtk_clipboard.request_text(self.callback)
+  def got_text(text)
+    return if text.nil?         # clipboard is not textual
+    return if text == @last_text
+    self.Changed(text)
+    @last_text = text
+  end
 
-	def owner_change(self, gtk_clipboard, event, data=None):
-		# print "OC c: %r e: %r d: %r" % (gtk_clipboard, event, data)
-		gtk_clipboard.request_text(self.callback)
+  dbus_interface "net.vidner.ClipboardRelay" do
+    dbus_signal :Changed, "text:s"
+  end
+end
 
-	def callback(self, gtk_clipboard, text, data):
-		# print "CB c: %r t: %r d: %r" % (clipboard, text, data)
-		self.Changed(text)
+bus = DBus::SessionBus.instance
+bus.glibize
 
-	@dbus.service.signal(dbus_interface='net.vidner.ClipboardRelay',
-			     signature='s')
-	def Changed(self, value):
-		#print "*** %s" % value
-		pass
+clipboard = ClipboardRelay.new("/net/vidner/ClipboardRelay/Clipboard",
+                               Gdk::Atom.intern("CLIPBOARD"))
+primary   = ClipboardRelay.new("/net/vidner/ClipboardRelay/Primary",
+                               Gdk::Atom.intern("PRIMARY"))
 
-#gtk.main()
-clipboard = ClipboardRelay("/net/vidner/ClipboardRelay/Clipboard",
-			   gtk.gdk.SELECTION_CLIPBOARD)
-primary   = ClipboardRelay("/net/vidner/ClipboardRelay/Primary",
-			   gtk.gdk.SELECTION_PRIMARY)
-loop.run()
+service = bus.request_service "net.vidner.ClipboardRelay"
+service.export clipboard
+service.export primary
+Gtk.main
