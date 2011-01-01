@@ -27,9 +27,8 @@ def clipboard_changed(text)
   end
 end
 
-def url_klipper(url)
-  $klipper.setClipboardContents url
-#  $klipper.showKlipperManuallyInvokeActionMenu
+def url_copy(url)
+  $clipboard.Set url
 end
 
 # http://ruby-gnome2.sourceforge.jp/hiki.cgi?Gtk%3A%3AMenu
@@ -44,7 +43,7 @@ def url_menu(url)
 
   copy = Gtk::MenuItem.new("_Copy #{url}")
   copy.signal_connect("activate") do
-    url_klipper url
+    url_copy url
   end  
   menu.append copy
 
@@ -61,15 +60,12 @@ end
 
 bus = DBus::SessionBus.instance
 
-klipper_s = bus["org.kde.klipper"]
-klipper_o = klipper_s.object "/klipper"
-klipper_o.introspect
-$klipper = klipper_o["org.kde.klipper.klipper"]
-
-mr = DBus::MatchRule.new.from_s "type='signal',interface='net.vidner.ClipboardRelay',member='Changed',path='/net/vidner/ClipboardRelay/Clipboard'"
-bus.add_match(mr) do |msg|
-  clipboard_changed(msg.params[0])
-end
+clipboard_relay_svc = bus["net.vidner.ClipboardRelay"]
+clipboard = clipboard_relay_svc.object "/net/vidner/ClipboardRelay/Clipboard"
+clipboard.introspect
+clipboard.default_iface = "net.vidner.ClipboardRelay"
+clipboard.on_signal("Changed") { |text| clipboard_changed(text) }
+$clipboard = clipboard
 
 bus.glibize
 Gtk.main

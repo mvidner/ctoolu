@@ -27,6 +27,14 @@ class ClipboardRelay < DBus::Object
   end
 
   dbus_interface "net.vidner.ClipboardRelay" do
+    dbus_method :Set, "in text:s" do |text|
+      @gtk_clipboard.text = text
+    end
+
+    dbus_method :Get, "out text:s" do
+      [@last_text]
+    end
+
     dbus_signal :Changed, "text:s"
   end
 end
