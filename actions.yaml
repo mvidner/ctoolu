@@ -1,0 +1,25 @@
+--- 
+- !ruby/struct:KlipperAction 
+  label: Bugzilla.Novell.com
+  pattern: !ruby/regexp /bnc ?#?(\d+)/i
+  commands: 
+  - !ruby/struct:KlipperCommand 
+    label: Open
+    command: xdg-open https://bugzilla.novell.com/show_bug.cgi?id=%s
+    keep_output: false
+  - !ruby/struct:KlipperCommand 
+    label: Konq
+    command: konqueror https://bugzilla.novell.com/show_bug.cgi?id=%s
+    keep_output: false
+- !ruby/struct:KlipperAction 
+  label: openSUSE Feature
+  pattern: !ruby/regexp /fate ?#?(\d+)/i
+  commands: 
+  - !ruby/struct:KlipperCommand 
+    label: Open
+    command: xdg-open https://features.opensuse.org/%s
+    keep_output: false
+  - !ruby/struct:KlipperCommand 
+    label: Konq
+    command: konqueror https://features.opensuse.org/%s
+    keep_output: false

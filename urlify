@@ -6,48 +6,18 @@ require 'gtk2'
 KlipperAction = Struct.new :label, :pattern, :commands
 
 class KlipperCommand < Struct.new :label, :command, :keep_output
-
   def execute(captures)
     # TODO honor keep_output
     substituted = command % captures
     system substituted
   end
-
-  def _to_yaml
-    {
-      "label" => label,
-      "command" => command,
-      "keep_output" => keep_output,
-    }.to_yaml
-  end
 end
 
-$patterns = []
-$patterns << KlipperAction.new("Bugzilla.Novell.com",
-                               /bnc ?#?(\d+)/i,
-                               [
-                                KlipperCommand.new("Open",
-                                                   "xdg-open https://bugzilla.novell.com/show_bug.cgi?id=%s",
-                                                   false),
-                                KlipperCommand.new("Konq",
-                                                   "konqueror https://bugzilla.novell.com/show_bug.cgi?id=%s",
-                                                   false),
-                               ])
-$patterns << KlipperAction.new("openSUSE Feature",
-                               /fate ?#?(\d+)/i,
-                               [
-                                KlipperCommand.new("Open",
-                                                   "xdg-open https://features.opensuse.org/%s",
-                                                   false),
-                                KlipperCommand.new("Konq",
-                                                   "konqueror https://features.opensuse.org/%s",
-                                                   false),
-                               ])
-print $patterns.to_yaml
+$actions = YAML.load_file "actions.yaml"
 
 def clipboard_changed(text)
   # how to deal with multiple matches? warn but do only one
-  $patterns.each do |action|
+  $actions.each do |action|
     match_data = action.pattern.match(text)
     if match_data
       match_menu action, match_data.captures
