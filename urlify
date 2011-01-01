@@ -28,22 +28,36 @@ def clipboard_changed(text)
 end
 
 def url_klipper(url)
-  puts url
-  $klipper.setClipboardContents url # FIXME 1 how to disable, FIXME 2 avoid loop
-  $klipper.showKlipperManuallyInvokeActionMenu
+  $klipper.setClipboardContents url
+#  $klipper.showKlipperManuallyInvokeActionMenu
 end
 
 # http://ruby-gnome2.sourceforge.jp/hiki.cgi?Gtk%3A%3AMenu
 def url_menu(url)
-  button = 1
-  $menu.popup(nil, nil, button, 0)
-end
+  menu = Gtk::Menu.new
 
-menu = Gtk::Menu.new
-menu.append(Gtk::MenuItem.new("Test1"))
-menu.append(Gtk::MenuItem.new("Test2"))
-menu.show_all
-$menu = menu
+  open = Gtk::MenuItem.new("_Open #{url}")
+  open.signal_connect("activate") do
+    system "xdg-open", url
+  end
+  menu.append open
+
+  copy = Gtk::MenuItem.new("_Copy #{url}")
+  copy.signal_connect("activate") do
+    url_klipper url
+  end  
+  menu.append copy
+
+  menu.append Gtk::MenuItem.new(nil) # separator
+  menu.append Gtk::MenuItem.new("_Nothing")
+
+  menu.show_all
+
+  parent_shell = parent_item = nil
+  mouse_button = 1
+  activation_time = 0           # Time.now.to_i did not work
+  menu.popup(parent_shell, parent_item, mouse_button, activation_time)
+end
 
 bus = DBus::SessionBus.instance
 
@@ -57,11 +71,5 @@ bus.add_match(mr) do |msg|
   clipboard_changed(msg.params[0])
 end
 
-if false
-  main = DBus::Main.new
-  main << bus
-  main.run
-else
-  bus.glibize
-  Gtk.main
-end
+bus.glibize
+Gtk.main
