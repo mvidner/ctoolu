@@ -3,26 +3,54 @@ require 'rubygems'
 require 'dbus'
 require 'gtk2'
 
-$patterns = [
-            {
-              "name" => "BNC",
-              "pattern" => /bnc ?#?(\d+)/i,
-              "url" => "https://bugzilla.novell.com/show_bug.cgi?id=%s",
-            },
-            {
-              "name" => "FATE",
-              "pattern" => /fate ?#?(\d+)/i,
-              "url" => "https://features.opensuse.org/%s",
-            },
-           ]
+KlipperAction = Struct.new :label, :pattern, :commands
+
+class KlipperCommand < Struct.new :label, :command, :keep_output
+
+  def execute(captures)
+    # TODO honor keep_output
+    substituted = command % captures
+    system substituted
+  end
+
+  def _to_yaml
+    {
+      "label" => label,
+      "command" => command,
+      "keep_output" => keep_output,
+    }.to_yaml
+  end
+end
+
+$patterns = []
+$patterns << KlipperAction.new("Bugzilla.Novell.com",
+                               /bnc ?#?(\d+)/i,
+                               [
+                                KlipperCommand.new("Open",
+                                                   "xdg-open https://bugzilla.novell.com/show_bug.cgi?id=%s",
+                                                   false),
+                                KlipperCommand.new("Konq",
+                                                   "konqueror https://bugzilla.novell.com/show_bug.cgi?id=%s",
+                                                   false),
+                               ])
+$patterns << KlipperAction.new("openSUSE Feature",
+                               /fate ?#?(\d+)/i,
+                               [
+                                KlipperCommand.new("Open",
+                                                   "xdg-open https://features.opensuse.org/%s",
+                                                   false),
+                                KlipperCommand.new("Konq",
+                                                   "konqueror https://features.opensuse.org/%s",
+                                                   false),
+                               ])
 print $patterns.to_yaml
 
 def clipboard_changed(text)
-  $patterns.each do |hash|
-    match_data = hash["pattern"].match(text)
+  # how to deal with multiple matches? warn but do only one
+  $patterns.each do |action|
+    match_data = action.pattern.match(text)
     if match_data
-      puts hash["name"]
-      url_menu(hash["url"] % match_data.captures)
+      match_menu action, match_data.captures
     end
   end
 end
@@ -32,23 +60,18 @@ def url_copy(url)
 end
 
 # http://ruby-gnome2.sourceforge.jp/hiki.cgi?Gtk%3A%3AMenu
-def url_menu(url)
+def match_menu(action, captures)
   menu = Gtk::Menu.new
-
-  open = Gtk::MenuItem.new("_Open #{url}")
-  open.signal_connect("activate") do
-    system "xdg-open", url
-  end
-  menu.append open
-
-  copy = Gtk::MenuItem.new("_Copy #{url}")
-  copy.signal_connect("activate") do
-    url_copy url
-  end  
-  menu.append copy
-
+  menu.append Gtk::MenuItem.new(action.label)
   menu.append Gtk::MenuItem.new(nil) # separator
-  menu.append Gtk::MenuItem.new("_Nothing")
+  
+  action.commands.each do |command|
+    item = Gtk::MenuItem.new(command.label)
+    item.signal_connect("activate") do
+      command.execute captures
+    end
+    menu.append item
+  end
 
   menu.show_all
 
@@ -63,6 +86,8 @@ bus = DBus::SessionBus.instance
 clipboard_relay_svc = bus["net.vidner.ClipboardRelay"]
 clipboard = clipboard_relay_svc.object "/net/vidner/ClipboardRelay/Clipboard"
 clipboard.introspect
+# FIXME there is no ProxyObject#interfacce
+# FIXME ProxyObjectInterface#on_signal does not mimic ProxyObject#on_signal
 clipboard.default_iface = "net.vidner.ClipboardRelay"
 clipboard.on_signal("Changed") { |text| clipboard_changed(text) }
 $clipboard = clipboard
