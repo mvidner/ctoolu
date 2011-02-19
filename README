@@ -1,0 +1,13 @@
+Ctoolu (Clipboard Tool, Universal, pronounced "cthulhu") matches
+patterns in the clipboard text and pops up menus to execute actions.
+It is inspired by http://en.wikipedia.org/wiki/Klipper but aims to be
+more modular in its configuration.
+
+Get it:
+https://github.com/mvidner/ctoolu
+
+Requirements:
+- ruby-gtk2
+- ruby-dbus
+
+License: GPLv2
