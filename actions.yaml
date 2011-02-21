@@ -1,33 +1,21 @@
 --- 
-- !ruby/struct:KlipperAction 
+- !ruby/struct:CtooluAction 
   label: Bugzilla.Novell.com
-  pattern: !ruby/regexp /bnc ?#?(\d+)/i
-  commands: 
-  - !ruby/struct:KlipperCommand 
-    label: Open
-    command: xdg-open https://bugzilla.novell.com/show_bug.cgi?id=%s
-    keep_output: false
-  - !ruby/struct:KlipperCommand 
-    label: Konq
-    command: konqueror https://bugzilla.novell.com/show_bug.cgi?id=%s
-    keep_output: false
-- !ruby/struct:KlipperAction 
+  pattern: !ruby/regexp /(?:bnc|bug) ?#?(\d+)/i
+  url: https://bugzilla.novell.com/show_bug.cgi?id=%s
+- !ruby/struct:CtooluAction 
   label: openSUSE Feature
-  pattern: !ruby/regexp /fate ?#?(\d+)/i
-  commands: 
-  - !ruby/struct:KlipperCommand 
-    label: Open
-    command: xdg-open https://features.opensuse.org/%s
-    keep_output: false
-  - !ruby/struct:KlipperCommand 
-    label: Konq
-    command: konqueror https://features.opensuse.org/%s
-    keep_output: false
-- !ruby/struct:KlipperAction 
-  label: BNC Attachment
+  pattern: !ruby/regexp /(?:fate|feature) ?#?(\d+)/i
+  url: https://features.opensuse.org/%s
+- !ruby/struct:CtooluAction 
+  label: BNC Attachment URL
   pattern: !ruby/regexp /(https:\/\/bugzilla.novell.com\/attachment.cgi\?id=\d+)/
   commands: 
-  - !ruby/struct:KlipperCommand 
+  - !ruby/struct:CtooluCommand 
     label: Buglog
     command: buglog %s
     keep_output: false
+- !ruby/struct:CtooluAction 
+  label: openSUSE BuildService Project
+  pattern: !ruby/regexp /\A(\w+(:\w+)+)\Z/
+  url: https://build.opensuse.org/project/show?project=%s

@@ -4,9 +4,10 @@ require 'dbus'
 require 'gtk2'
 require 'yaml'
 
-KlipperAction = Struct.new :label, :pattern, :commands
+# actual url is constructed as url % pattern.match(text).captures
+CtooluAction = Struct.new :label, :pattern, :url, :commands
 
-class KlipperCommand < Struct.new :label, :command, :keep_output
+class CtooluCommand < Struct.new :label, :command, :keep_output
   def execute(captures)
     # TODO honor keep_output
     substituted = command % captures
@@ -44,9 +45,17 @@ end
 # http://ruby-gnome2.sourceforge.jp/hiki.cgi?Gtk%3A%3AMenu
 def match_menu(action, captures)
   menu = Gtk::Menu.new
-  menu.append Gtk::MenuItem.new(action.label)
+
+  label_item = Gtk::MenuItem.new(action.label)
+  label_item.signal_connect("activate") do
+    action.url ||= "%s"
+    url_copy(action.url % captures)
+  end
+  menu.append label_item
+
   menu.append Gtk::MenuItem.new(nil) # separator
-  
+
+  action.commands ||= []
   action.commands.each do |command|
     item = Gtk::MenuItem.new(command.label)
     item.signal_connect("activate") do
