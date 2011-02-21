@@ -2,6 +2,7 @@
 require 'rubygems'
 require 'dbus'
 require 'gtk2'
+require 'yaml'
 
 KlipperAction = Struct.new :label, :pattern, :commands
 
