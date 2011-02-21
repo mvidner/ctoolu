@@ -23,3 +23,11 @@
     label: Konq
     command: konqueror https://features.opensuse.org/%s
     keep_output: false
+- !ruby/struct:KlipperAction 
+  label: BNC Attachment
+  pattern: !ruby/regexp /(https:\/\/bugzilla.novell.com\/attachment.cgi\?id=\d+)/
+  commands: 
+  - !ruby/struct:KlipperCommand 
+    label: Buglog
+    command: buglog %s
+    keep_output: false

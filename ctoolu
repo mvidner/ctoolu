@@ -10,7 +10,18 @@ class KlipperCommand < Struct.new :label, :command, :keep_output
   def execute(captures)
     # TODO honor keep_output
     substituted = command % captures
-    system substituted
+    run_in_background substituted
+  end
+
+  private
+  def run_in_background(command)
+    child_pid = fork
+    if child_pid
+      # reap and ignore the return status, don't leave a zombie around
+      Process.detach(child_pid)
+    else
+      exec command
+    end
   end
 end
 
