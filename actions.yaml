@@ -12,6 +12,14 @@
   pattern: !ruby/regexp /(?:fate|feature) ?#?(\d+)/i
   url: https://features.opensuse.org/%s
 - !ruby/struct:CtooluAction 
+  label: BNC Bug URL
+  pattern: !ruby/regexp /(https:\/\/bugzilla.novell.com\/show_bug.cgi\?id=\d+)/
+  commands: 
+  - !ruby/struct:CtooluCommand 
+    label: bug_summary
+    command: bug_summary %s
+    keep_output: true
+- !ruby/struct:CtooluAction 
   label: BNC Attachment URL
   pattern: !ruby/regexp /(https:\/\/bugzilla.novell.com\/attachment.cgi\?id=\d+)/
   commands: 

@@ -11,7 +11,11 @@ class CtooluCommand < Struct.new :label, :command, :keep_output
   def execute(captures)
     # TODO honor keep_output
     substituted = command % captures
-    run_in_background substituted
+    if keep_output
+      $clipboard.Set `#{substituted}`
+    else
+      run_in_background substituted
+    end
   end
 
   private
