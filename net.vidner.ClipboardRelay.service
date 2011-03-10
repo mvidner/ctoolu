@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=net.vidner.ClipboardRelay
+# use env so that it can be found both for user and system installs
+Exec=/usr/bin/env clipboard-relay

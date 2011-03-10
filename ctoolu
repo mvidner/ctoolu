@@ -4,6 +4,8 @@ require 'dbus'
 require 'gtk2'
 require 'yaml'
 
+HOME = ENV['HOME']
+
 # actual url is constructed as url % pattern.match(text).captures
 CtooluAction = Struct.new :label, :pattern, :url, :commands
 
@@ -30,7 +32,25 @@ class CtooluCommand < Struct.new :label, :command, :keep_output
   end
 end
 
-$actions = YAML.load_file File.expand_path("../actions.yaml", __FILE__)
+def load_actions
+  try_dirs = [
+              ".",
+              "#{HOME}/.local/share/ctoolu",
+              "/usr/share/ctoolu",
+             ]
+  try_configs = try_dirs.map{|dir| File.join(dir, "actions.yaml")}
+  found_config = try_configs.find do |config|
+    File.exists? config
+  end
+  if found_config
+    puts "Config used: #{found_config}"
+  else
+    fail "Config not found in #{try_configs.join ','}"
+  end
+  YAML.load_file found_config
+end
+
+$actions = load_actions
 
 def clipboard_changed(text)
   # how to deal with multiple matches? warn but do only one

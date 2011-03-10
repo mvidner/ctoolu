@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=ctoolu
+GenericName=Clipboard Assistant
+Exec=/usr/bin/ctoolu
+NoDisplay=true
