@@ -4,6 +4,10 @@
   pattern: !ruby/regexp /(?:bnc|bug) ?#?(\d+)/i
   url: https://bugzilla.novell.com/show_bug.cgi?id=%s
 - !ruby/struct:CtooluAction 
+  label: Novell Feature
+  pattern: !ruby/regexp /(?:fate|feature) ?#?(\d+)/i
+  url: https://fate.novell.com/%s
+- !ruby/struct:CtooluAction 
   label: openSUSE Feature
   pattern: !ruby/regexp /(?:fate|feature) ?#?(\d+)/i
   url: https://features.opensuse.org/%s
