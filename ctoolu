@@ -26,7 +26,7 @@ class CtooluCommand < Struct.new :label, :command, :keep_output
   end
 end
 
-$actions = YAML.load_file "actions.yaml"
+$actions = YAML.load_file File.expand_path("../actions.yaml", __FILE__)
 
 def clipboard_changed(text)
   # how to deal with multiple matches? warn but do only one
