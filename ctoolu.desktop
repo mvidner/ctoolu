@@ -2,5 +2,5 @@
 Type=Application
 Name=ctoolu
 GenericName=Clipboard Assistant
-Exec=/usr/bin/ctoolu
+Exec=/usr/bin/env ctoolu
 NoDisplay=true
