@@ -1,16 +1,28 @@
 --- 
 - !ruby/struct:CtooluAction 
   label: Bugzilla.Novell.com
-  pattern: !ruby/regexp /(?:bnc|bug) ?#?(\d+)/i
+  pattern: !ruby/regexp /(?:bnc|bug) ?[#-]?(\d+)/i
   url: https://bugzilla.novell.com/show_bug.cgi?id=%s
 - !ruby/struct:CtooluAction 
   label: Novell Feature
-  pattern: !ruby/regexp /(?:fate|feature) ?#?(\d+)/i
+  pattern: !ruby/regexp /(?:fate|feature) ?[#-]?(\d+)/i
   url: https://fate.novell.com/%s
 - !ruby/struct:CtooluAction 
   label: openSUSE Feature
-  pattern: !ruby/regexp /(?:fate|feature) ?#?(\d+)/i
+  pattern: !ruby/regexp /(?:fate|feature) ?[#-]?(\d+)/i
   url: https://features.opensuse.org/%s
+- !ruby/struct:CtooluAction 
+  label: SUSE SWAMP ID
+  pattern: !ruby/regexp /swamp ?[#-]?(\d+)/i
+  url: https://swamp.suse.de/webswamp/wf/%s
+- !ruby/struct:CtooluAction 
+  label: OBS Submit Request
+  pattern: !ruby/regexp /SR ?[#-]?(\d+)/i
+  url:   https://build.opensuse.org/request/show/%s
+- !ruby/struct:CtooluAction 
+  label: IBS Submit Request
+  pattern: !ruby/regexp /SR ?[#-]?(\d+)/i
+  url:   https://build.suse.de/request/show/%s
 - !ruby/struct:CtooluAction 
   label: BNC Bug URL
   pattern: !ruby/regexp /(https:\/\/bugzilla.novell.com\/show_bug.cgi\?id=\d+)/
@@ -29,5 +41,9 @@
     keep_output: false
 - !ruby/struct:CtooluAction 
   label: openSUSE BuildService Project
-  pattern: !ruby/regexp /\A(\w+(:\w+)+)\Z/
+  pattern: !ruby/regexp /\A([[:alpha:]]\w+(:\w+)+)\Z/
   url: https://build.opensuse.org/project/show?project=%s
+- !ruby/struct:CtooluAction 
+  label: YaST SVN revision
+  pattern: !ruby/regexp /\Ar([[:digit:]]+)\Z/
+  url: http://svn.opensuse.org/viewvc/yast?view=revision&revision=%s
