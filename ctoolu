@@ -88,6 +88,9 @@ def match_menu(action, captures)
     menu.append item
   end
 
+  menu.append Gtk::MenuItem.new(nil) # separator
+  menu.append Gtk::MenuItem.new("_Cancel") # do nothing
+
   menu.show_all
 
   parent_shell = parent_item = nil
