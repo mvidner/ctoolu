@@ -28,9 +28,15 @@ SYSTEM_DIRS = {
 
 # calls FileUtils.install
 # but assumes the target is a directory and ensures it exists
+# Option :pkill will kill the program that was installed
+# (assuming it will get restarted somehow)
 def dir_install(source, target_dir, options={})
+  pkill = options.delete :pkill
   mkdir_p target_dir, options.merge({:mode => nil})
   install source, target_dir, options
+  if pkill
+    sh "pkill", "-f", "#{target_dir}/#{source}"
+  end
 end
 
 # installs ctoolu, using a hash defining the base directories
@@ -38,10 +44,10 @@ def ctoolu_install(dirs)
   # make ostruct from hash for easier access
   dirs = OpenStruct.new(dirs) unless dirs.respond_to? :bin
 
-  dir_install "ctoolu", dirs.bin, :mode => 0755
+  dir_install "ctoolu", dirs.bin, :mode => 0755, :pkill => true
   dir_install "ctoolu.desktop", dirs.xdg_config + "/autostart"
   dir_install "actions.yaml", dirs.xdg_data + "/ctoolu"
 
-  dir_install "clipboard-relay", dirs.bin, :mode => 0755
+  dir_install "clipboard-relay", dirs.bin, :mode => 0755, :pkill => true
   dir_install "net.vidner.ClipboardRelay.service", dirs.xdg_data + "/dbus-1/services"
 end
