@@ -17,11 +17,11 @@
   url: https://swamp.suse.de/webswamp/wf/%s
 - !ruby/struct:CtooluAction 
   label: OBS Submit Request
-  pattern: !ruby/regexp /SR ?[#-]?(\d+)/i
+  pattern: !ruby/regexp /(:?SR|request id) ?[#-]?(\d+)/i
   url:   https://build.opensuse.org/request/show/%s
 - !ruby/struct:CtooluAction 
   label: IBS Submit Request
-  pattern: !ruby/regexp /SR ?[#-]?(\d+)/i
+  pattern: !ruby/regexp /(:?SR|request id) ?[#-]?(\d+)/i
   url:   https://build.suse.de/request/show/%s
 - !ruby/struct:CtooluAction 
   label: BNC Bug URL
