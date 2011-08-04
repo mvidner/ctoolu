@@ -25,7 +25,7 @@
   url:   https://build.suse.de/request/show/%s
 - !ruby/struct:CtooluAction 
   label: BNC Bug URL
-  pattern: !ruby/regexp /(https:\/\/bugzilla.novell.com\/show_bug.cgi\?id=\d+)/
+  pattern: !ruby/regexp /(https?:\/\/bugzilla.novell.com\/show_bug.cgi\?id=\d+)/
   commands: 
   - !ruby/struct:CtooluCommand 
     label: bug_summary
@@ -33,7 +33,7 @@
     keep_output: true
 - !ruby/struct:CtooluAction 
   label: BNC Attachment URL
-  pattern: !ruby/regexp /(https:\/\/bugzilla.novell.com\/attachment.cgi\?id=\d+)/
+  pattern: !ruby/regexp /(https?:\/\/bugzilla.novell.com\/attachment.cgi\?id=\d+)/
   commands: 
   - !ruby/struct:CtooluCommand 
     label: Buglog
