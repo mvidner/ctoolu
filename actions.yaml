@@ -13,7 +13,7 @@
   url: https://features.opensuse.org/%s
 - !ruby/struct:CtooluAction 
   label: SUSE SWAMP ID
-  pattern: !ruby/regexp /swamp ?[#-]?(\d+)/i
+  pattern: !ruby/regexp /(?:maint:running:|swamp ?[#-]?)(\d+)/i
   url: https://swamp.suse.de/webswamp/wf/%s
 - !ruby/struct:CtooluAction 
   label: OBS Submit Request
@@ -45,5 +45,5 @@
   url: https://build.opensuse.org/project/show?project=%s
 - !ruby/struct:CtooluAction 
   label: YaST SVN revision
-  pattern: !ruby/regexp /\Ar([[:digit:]]+)\Z/
+  pattern: !ruby/regexp /\A(?:Committed revision |r)([[:digit:]]+)\Z/
   url: http://svn.opensuse.org/viewvc/yast?view=revision&revision=%s
