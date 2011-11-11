@@ -31,6 +31,9 @@
     label: bug_summary
     command: bug_summary %s
     keep_output: true
+  - !ruby/struct:CtooluCommand 
+    label: edit notes
+    command: bug_notes %s
 - !ruby/struct:CtooluAction 
   label: BNC Attachment URL
   pattern: !ruby/regexp /(https?:\/\/bugzilla.novell.com\/attachment.cgi\?id=\d+)/
@@ -47,3 +50,11 @@
   label: YaST SVN revision
   pattern: !ruby/regexp /\A(?:Committed revision |r)([[:digit:]]+)\Z/
   url: http://svn.opensuse.org/viewvc/yast?view=revision&revision=%s
+- !ruby/struct:CtooluAction 
+  label: SVN plain URL
+  pattern: !ruby/regexp /\Ahttp://svn.opensuse.org/svn/(\S+)\Z/
+  commands: 
+  - !ruby/struct:CtooluCommand 
+    label: make ViewVC URL
+    command: echo http://svn.opensuse.org/viewvc/%s
+    keep_output: true
