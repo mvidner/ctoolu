@@ -35,7 +35,9 @@ def dir_install(source, target_dir, options={})
   mkdir_p target_dir, options.merge({:mode => nil})
   install source, target_dir, options
   if pkill
-    sh "pkill", "-f", "#{target_dir}/#{source}"
+    # Pkill never kills itself, good.
+    # The variable references ensure it doesn't kill its parent shell, duh.
+    sh "TD=#{target_dir}; S=#{source}; pkill -f $TD/$S || true"
   end
 end
 
