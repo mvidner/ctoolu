@@ -11,7 +11,6 @@ CtooluAction = Struct.new :label, :pattern, :url, :commands
 
 class CtooluCommand < Struct.new :label, :command, :keep_output
   def execute(captures)
-    # TODO honor keep_output
     substituted = command % captures
     if keep_output
       $clipboard.Set `#{substituted}`
