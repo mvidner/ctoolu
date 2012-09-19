@@ -1,0 +1,12 @@
+- !ruby/struct:CtooluAction 
+  label: Novell Feature
+  pattern: !ruby/regexp /(?:fate|feature) ?[#-]?(\d+)/i
+  url: https://fate.novell.com/%s
+- !ruby/struct:CtooluAction 
+  label: SUSE SWAMP ID
+  pattern: !ruby/regexp /(?:maint:running:|swamp ?[#-]?)(\d+)/i
+  url: https://swamp.suse.de/webswamp/wf/%s
+- !ruby/struct:CtooluAction 
+  label: IBS Submit Request
+  pattern: !ruby/regexp /(?:SR|request id) ?[#-]?(\d+)/i
+  url:   https://build.suse.de/request/show/%s

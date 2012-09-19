@@ -32,22 +32,32 @@ class CtooluCommand < Struct.new :label, :command, :keep_output
   end
 end
 
+# returns an Array of CtooluAction
+def load_rule_file(file_name)
+  YAML.load_file file_name
+end
+
+# returns an Array of all CtooluActions.
+# FIXME: no precedence or overriding is implemented
 def load_actions
   try_dirs = [
-              ".",
+              "./rules",
               "#{HOME}/.local/share/ctoolu",
               "/usr/share/ctoolu",
              ]
-  try_configs = try_dirs.map{|dir| File.join(dir, "actions.yaml")}
-  found_config = try_configs.find do |config|
-    File.exists? config
+
+  actions = try_dirs.map do |dir|
+    file_names = Dir.glob(File.join(dir, "*.yaml"))
+    file_names.map { |fn| load_rule_file(fn) }
   end
-  if found_config
-    puts "Config used: #{found_config}"
-  else
-    fail "Config not found in #{try_configs.join ','}"
+  # Now actions is a nested Array of CtooluAction,
+  # grouped by file and directory. Flatten the 2 groupings.
+  actions.flatten!(2)
+
+  if actions.empty?
+    fail "No rules found in #{try_configs.join ','}"
   end
-  YAML.load_file found_config
+  actions
 end
 
 $actions = load_actions
