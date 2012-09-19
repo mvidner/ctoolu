@@ -48,7 +48,7 @@ def ctoolu_install(dirs)
 
   dir_install "ctoolu", dirs.bin, :mode => 0755, :pkill => true
   dir_install "ctoolu.desktop", dirs.xdg_config + "/autostart"
-  Dir.glob("rules/*.yaml") do |rule|
+  Dir.glob("data/ctoolu/*.yaml") do |rule|
     dir_install rule, dirs.xdg_data + "/ctoolu"
   end
   dir_install "clipboard-relay", dirs.bin, :mode => 0755, :pkill => true

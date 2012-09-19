@@ -36,25 +36,42 @@ def load_rule_file(file_name)
   YAML.load_file file_name
 end
 
-# returns an Array of all CtooluActions.
-# FIXME: no precedence or overriding is implemented
-def load_actions
-  try_dirs = [
-              "./rules",
-              "#{HOME}/.local/share/ctoolu",
-              "/usr/share/ctoolu",
-             ]
+XDG_DATA_HOME = ENV.fetch('XDG_DATA_HOME', "#{HOME}/.local/share")
+XDG_DATA_DIRS = [XDG_DATA_HOME] +
+  ENV.fetch('XDG_DATA_DIRS', '/usr/local/share:/usr/share').split(':')
 
-  actions = try_dirs.map do |dir|
+# API modeled after python-xdg, because xdg.gem sucks
+def load_data_paths(resource)
+  paths = XDG_DATA_DIRS.map { |dir| Pathname.new(dir) + resource }
+  paths.select { |p| p.exist? }
+end
+
+# returns an Array of all CtooluActions.
+# Directories are searched in order of preference:
+# a file in the systemwide directory will be ignored if an equally named
+# file is present in the user's directory.
+def load_actions
+  seen_basenames = Set.new
+  actions = []
+
+  try_dirs = load_data_paths "ctoolu"
+  try_dirs.each do |dir|
     file_names = Dir.glob(File.join(dir, "*.yaml"))
-    file_names.map { |fn| load_rule_file(fn) }
+    file_names.each do |fn|
+      basename = File.basename(fn)
+      if seen_basenames.include?(basename)
+        puts "SKIP #{fn}" if $DEBUG
+        next
+      end
+
+      puts "LOAD #{fn}" if $DEBUG
+      seen_basenames.add(basename)
+      actions += load_rule_file(fn)
+    end
   end
-  # Now actions is a nested Array of CtooluAction,
-  # grouped by file and directory. Flatten the 2 groupings.
-  actions.flatten!(2)
 
   if actions.empty?
-    fail "No rules found in #{try_configs.join ','}"
+    fail 'No rules found. Try `strace -e file ctoolu`'
   end
   actions
 end
