@@ -43,7 +43,7 @@ XDG_DATA_DIRS = [XDG_DATA_HOME] +
 # API modeled after python-xdg, because xdg.gem sucks
 def load_data_paths(resource)
   paths = XDG_DATA_DIRS.map { |dir| Pathname.new(dir) + resource }
-  paths.select { |p| p.exist? }
+  paths.select { |p| p.absolute? && p.exist? }
 end
 
 # returns an Array of all CtooluActions.
