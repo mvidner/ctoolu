@@ -45,6 +45,56 @@ module XDG
   module_function :load_data_paths
 end # module XDG
 
+# USAGE:
+# m = CtooluMenu.new
+# actions.each do |a|
+#   m.add_group(a.label) { a.execute }
+#   a.commands.each do |c|
+#     m.add_item(c.label) { c.execute }
+#   end
+# end
+# m.show
+#
+# This will work even for empty lists of actions (no menu) or commands.
+class CtooluMenu
+  # implementation:
+  # http://ruby-gnome2.sourceforge.jp/hiki.cgi?Gtk%3A%3AMenu
+
+  def initialize
+    @menu = Gtk::Menu.new
+    @seen_group = false
+  end
+
+  def add_group(label, &action)
+    if @seen_group
+      @menu.append Gtk::MenuItem.new(nil) # separator
+    end
+    @seen_group = true
+
+    add_item(label, &action)
+  end
+
+  def add_item(label, &action)
+    item = Gtk::MenuItem.new(label)
+    item.signal_connect("activate", &action)
+    @menu.append item
+  end
+
+  def show
+    if @seen_group
+      add_group("_Cancel") do
+        # do nothing
+      end
+
+      @menu.show_all
+      parent_shell = parent_item = nil
+      mouse_button = 1
+      activation_time = 0           # Time.now.to_i did not work
+      @menu.popup(parent_shell, parent_item, mouse_button, activation_time)
+    end
+  end
+end
+
 class Ctoolu < DBus::Object
   def initialize(path)
     super(path)
@@ -81,57 +131,31 @@ class Ctoolu < DBus::Object
     actions
   end
 
-  def clipboard_changed(text)
-    # how to deal with multiple matches? warn but do only one
-    @actions.each do |action|
-      match_data = action.pattern.match(text)
-      if match_data
-        match_menu action, match_data.captures
-      end
-    end
-  end
-
   dbus_interface "net.vidner.Ctoolu" do
     dbus_method :Activate do
       clipboard_changed($clipboard.Get[0])
     end
   end
 
-  def url_copy(url)
-    $clipboard.Set url
-  end
+  def clipboard_changed(text)
+    menu = CtooluMenu.new
+    @actions.each do |action|
+      match_data = action.pattern.match(text)
+      next unless match_data
 
-  # http://ruby-gnome2.sourceforge.jp/hiki.cgi?Gtk%3A%3AMenu
-  def match_menu(action, captures)
-    menu = Gtk::Menu.new
-
-    label_item = Gtk::MenuItem.new(action.label)
-    label_item.signal_connect("activate") do
-      action.url ||= "%s"
-      url_copy(action.url % captures)
-    end
-    menu.append label_item
-
-    menu.append Gtk::MenuItem.new(nil) # separator
-
-    action.commands ||= []
-    action.commands.each do |command|
-      item = Gtk::MenuItem.new(command.label)
-      item.signal_connect("activate") do
-        command.execute captures
+      menu.add_group(action.label) do
+        action.url ||= "%s"
+        $clipboard.Set(action.url % match_data.captures)
       end
-      menu.append item
+
+      action.commands ||= []
+      action.commands.each do |command|
+        menu.add_item(command.label) do
+          command.execute match_data.captures
+        end
+      end
     end
-
-    menu.append Gtk::MenuItem.new(nil) # separator
-    menu.append Gtk::MenuItem.new("_Cancel") # do nothing
-
-    menu.show_all
-
-    parent_shell = parent_item = nil
-    mouse_button = 1
-    activation_time = 0           # Time.now.to_i did not work
-    menu.popup(parent_shell, parent_item, mouse_button, activation_time)
+    menu.show
   end
 end
 
