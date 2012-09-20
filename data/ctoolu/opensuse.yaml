@@ -31,7 +31,7 @@
     keep_output: false
 - !ruby/struct:CtooluAction 
   label: openSUSE BuildService Project
-  pattern: !ruby/regexp /\A([[:alpha:]]\w+(:\w+)+)\Z/
+  pattern: !ruby/regexp /\A([[:alpha:]][^[:space:]/]+(?:[^[:space:]/]+)+)\Z/
   url: https://build.opensuse.org/project/show?project=%s
 - !ruby/struct:CtooluAction 
   label: SVN plain URL
