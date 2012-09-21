@@ -1,0 +1,16 @@
+- !ruby/struct:CtooluAction 
+  label: Bugs.KDE.org
+  pattern: !ruby/regexp /kde ?[#-]?(\d{2,})/i
+  url: https://bugs.kde.org/show_bug.cgi?id=%s
+- !ruby/struct:CtooluAction 
+  label: Bugzilla.GNOME.org
+  pattern: !ruby/regexp /bgo ?[#-]?(\d+)/i
+  url: https://bugzilla.gnome.org/show_bug.cgi?id=%s
+- !ruby/struct:CtooluAction 
+  label: Bugs.FreeDesktop.org
+  pattern: !ruby/regexp /fdo ?[#-]?(\d+)/i
+  url: https://bugs.freedesktop.org/show_bug.cgi?id=%s
+- !ruby/struct:CtooluAction 
+  label: Launchpad
+  pattern: !ruby/regexp /lp ?[#-]?(\d+)/i
+  url: https://bugs.launchpad.net/bugs/%s
