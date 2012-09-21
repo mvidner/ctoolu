@@ -12,5 +12,5 @@
   url:   https://build.suse.de/request/show/%s
 - !ruby/struct:CtooluAction 
   label: IBS Project
-  pattern: !ruby/regexp /\A([[:alpha:]][^[:space:]/]+(?:[^[:space:]/]+)+)\Z/
+  pattern: !ruby/regexp /\A([[:alpha:]][^[:space:]/]+(?::[^[:space:]/]+)+)\Z/
   url: https://build.suse.de/project/show?project=%s
