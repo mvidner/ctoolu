@@ -3,5 +3,5 @@
   pattern: !ruby/regexp /(https?:\/\/\S+)/
   commands: 
   - !ruby/struct:CtooluCommand 
-    label: Open in broxser (xdg-open)
+    label: Open in browser (xdg-open)
     command: xdg-open %s
