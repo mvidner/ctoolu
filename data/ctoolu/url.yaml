@@ -1,0 +1,7 @@
+- !ruby/struct:CtooluAction 
+  label: HTTP URL
+  pattern: !ruby/regexp /(https?:\/\/\S+)/
+  commands: 
+  - !ruby/struct:CtooluCommand 
+    label: Open in broxser (xdg-open)
+    command: xdg-open %s
