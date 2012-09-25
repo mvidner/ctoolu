@@ -2,6 +2,7 @@
 require 'rubygems'
 require 'dbus'
 require 'gtk2'
+require 'pathname'
 require 'yaml'
 
 HOME = ENV['HOME']
