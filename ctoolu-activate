@@ -1,0 +1,4 @@
+#!/bin/sh
+
+dbus-send --type=method_call --dest=net.vidner.Ctoolu \
+    /net/vidner/Ctoolu net.vidner.Ctoolu.Activate
