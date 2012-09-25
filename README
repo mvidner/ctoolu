@@ -23,6 +23,11 @@ It will install clipboard-relay on the session D-Bus and set up ctoolu for
 session autostart.
 FIXME it will overwrite the configuration file if it is already installed.
 
+Usage:
+Ensure ctoolu is launched either manually or via ctoolu.desktop by
+restarting your desktop session.  When text which matches one of the
+pattern is copied to the clipboard, you will see a popup menu.
+
 Requirements:
 - ruby-gtk2
 - ruby-dbus
