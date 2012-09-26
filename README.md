@@ -11,10 +11,6 @@ Ensure ctoolu is launched either manually or via `ctoolu.desktop` by
 restarting your desktop session.  When text which matches one of the
 pattern is copied to the clipboard, you will see a popup menu.
 
-Edit `ctoolu.yaml` to have it watch the primary selection instead of
-the clipboard, or to switch from automatic to explicit activation via
-`ctoolu-activate`.
-
 ## Examples of patterns:
 
 - bnc#778347   https://bugzilla.novell.com/show_bug.cgi?id=778347
@@ -50,6 +46,18 @@ session autostart.
     V=`sed -n '/VERSION *= */s///;T;p' /etc/SuSE-release`
     sudo zypper ar http://download.opensuse.org/repositories/home:/Lazy_Kent/openSUSE_$V lazykent
     sudo zypper in rubygems rubygem-rake rubygem-ruby-dbus ruby-gtk2
+
+## Configuration
+
+Edit `ctoolu.yaml` in `/etc/xdg` (for system-wide installations) or
+`$HOME/.config` (for per-user installations) to have it watch the
+primary selection instead of the clipboard, or to switch from
+automatic to explicit activation via `ctoolu-activate`.
+
+The patterns to be matched, and actions offered via the pop-up menu
+are defined in YAML files under `/usr/share/ctoolu` (for system-wide
+installations) or `$HOME/.local/share/ctoolu` (for per-user
+installations).  See the existing files for example syntax.
 
 ## License
 
