@@ -48,8 +48,6 @@ or for the current user via:
 It will install `clipboard-relay` on the session D-Bus and set up ctoolu for
 session autostart.
 
-*FIXME* it will overwrite the configuration file if it is already installed.
-
 ## Configuration
 
 Edit `ctoolu.yaml` in `/etc/xdg` (for system-wide installations) or
@@ -61,6 +59,11 @@ The patterns to be matched, and actions offered via the pop-up menu
 are defined in YAML files under `/usr/share/ctoolu` (for system-wide
 installations) or `$HOME/.local/share/ctoolu` (for per-user
 installations).  See the existing files for example syntax.
+
+## Support / known issues
+
+Please visit https://github.com/mvidner/ctoolu/issues to see known
+issues and report new issues or feature requests.
 
 ## License
 
