@@ -24,6 +24,17 @@ pattern is copied to the clipboard, you will see a popup menu.
 
 https://github.com/mvidner/ctoolu
 
+## Requirements
+
+- ruby-gtk2
+- ruby-dbus gem
+
+### Getting the requirements on openSUSE
+
+    V=`sed -n '/VERSION *= */s///;T;p' /etc/SuSE-release`
+    sudo zypper ar http://download.opensuse.org/repositories/home:/Lazy_Kent/openSUSE_$V lazykent
+    sudo zypper in rubygems rubygem-rake rubygem-ruby-dbus ruby-gtk2
+
 ## Installation
 
     sudo rake install
@@ -35,17 +46,6 @@ It will install `clipboard-relay` on the session D-Bus and set up ctoolu for
 session autostart.
 
 *FIXME* it will overwrite the configuration file if it is already installed.
-
-## Requirements
-
-- ruby-gtk2
-- ruby-dbus
-
-### Getting the requirements on openSUSE
-
-    V=`sed -n '/VERSION *= */s///;T;p' /etc/SuSE-release`
-    sudo zypper ar http://download.opensuse.org/repositories/home:/Lazy_Kent/openSUSE_$V lazykent
-    sudo zypper in rubygems rubygem-rake rubygem-ruby-dbus ruby-gtk2
 
 ## Configuration
 
