@@ -52,6 +52,7 @@ def ctoolu_install(dirs)
   dirs = OpenStruct.new(dirs) unless dirs.respond_to? :bin
 
   dir_install "ctoolu", dirs.bin, :mode => 0755, :pkill => true
+  dir_install "ctoolu-activate", dirs.bin, :mode => 0755
   dir_install "ctoolu.desktop", dirs.xdg_config + "/autostart"
   dir_install "config/ctoolu.yaml", dirs.xdg_config
   Dir.glob("data/ctoolu/*.yaml") do |rule|
