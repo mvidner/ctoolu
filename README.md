@@ -37,9 +37,12 @@ https://github.com/mvidner/ctoolu
 
 ## Installation
 
+Install system-wide via:
+
     sudo rake install
 
-or
+or for the current user via:
+
     rake install_user
 
 It will install `clipboard-relay` on the session D-Bus and set up ctoolu for
