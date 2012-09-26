@@ -39,11 +39,30 @@ module XDG
   XDG_DATA_DIRS = [XDG_DATA_HOME] +
     ENV.fetch('XDG_DATA_DIRS', '/usr/local/share:/usr/share').split(':')
 
+  XDG_CONFIG_HOME = ENV.fetch('XDG_CONFIG_HOME', "#{HOME}/.config")
+  XDG_CONFIG_DIRS = [XDG_CONFIG_HOME] +
+    ENV.fetch('XDG_CONFIG_DIRS', '/etc/xdg').split(':')
+
+  # @return [Array<String>] paths
   def load_data_paths(resource)
     paths = XDG_DATA_DIRS.map { |dir| Pathname.new(dir) + resource }
     paths.select { |p| p.absolute? && p.exist? }
   end
   module_function :load_data_paths
+
+  # @return [Array<String>] paths
+  def load_config_paths(resource)
+    paths = XDG_CONFIG_DIRS.map { |dir| Pathname.new(dir) + resource }
+    paths.select { |p| p.absolute? && p.exist? }
+  end
+  module_function :load_config_paths
+
+  # @return [String, nil]
+  def load_first_config(resource)
+    # correctly returns nil for an empty list
+    load_config_paths(resource).first
+  end
+  module_function :load_first_config
 end # module XDG
 
 # USAGE:
@@ -96,6 +115,27 @@ class CtooluMenu
   end
 end
 
+class CtooluConfig
+  include Singleton
+
+  attr_reader :config
+  def initialize
+    config_filename = XDG.load_first_config('ctoolu.yaml')
+    if config_filename.nil?
+      fail "Configuration ctoolu.yaml not found. Try `strace -e file #{$0}`"
+    end
+    @config = YAML.load_file(config_filename)
+  end
+
+  def self.text_source
+    self.instance.config["text_source"]
+  end
+
+  def self.auto_activate
+    self.instance.config["auto_activate"]
+  end
+end
+
 class Ctoolu < DBus::Object
   def initialize(path)
     super(path)
@@ -127,7 +167,7 @@ class Ctoolu < DBus::Object
     end
 
     if actions.empty?
-      fail 'No rules found. Try `strace -e file ctoolu`'
+      fail "No rules found. Try `strace -e file #{$0}`"
     end
     actions
   end
@@ -168,12 +208,22 @@ service = bus.request_service "net.vidner.Ctoolu"
 service.export ctoolu
 
 clipboard_relay_svc = bus["net.vidner.ClipboardRelay"]
-clipboard = clipboard_relay_svc.object "/net/vidner/ClipboardRelay/Clipboard"
+case CtooluConfig.text_source
+when "primary"
+  clipboard_path = "/net/vidner/ClipboardRelay/Primary"
+when "clipboard"
+  clipboard_path = "/net/vidner/ClipboardRelay/Clipboard"
+else
+  fail "Unknown CtooluConfig.text_source '#{CtooluConfig.text_source}'"
+end
+clipboard = clipboard_relay_svc.object(clipboard_path)
 clipboard.introspect
-# FIXME there is no ProxyObject#interfacce
-# FIXME ProxyObjectInterface#on_signal does not mimic ProxyObject#on_signal
 clipboard.default_iface = "net.vidner.ClipboardRelay"
-clipboard.on_signal("Changed") { |text| ctoolu.clipboard_changed(text) }
+if CtooluConfig.auto_activate
+  # FIXME there is no ProxyObject#interfacce
+  # FIXME ProxyObjectInterface#on_signal does not mimic ProxyObject#on_signal
+  clipboard.on_signal("Changed") { |text| ctoolu.clipboard_changed(text) }
+end
 $clipboard = clipboard
 
 Gtk.main

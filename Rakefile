@@ -2,14 +2,19 @@
 
 require 'ostruct'
 
-desc "Install the application for this user"
+desc "Install the application for this user (OVERWRITES the configuration)"
 task :install_user do
   ctoolu_install USER_DIRS
 end
 
-desc "Install the application for systemwide use"
+desc "Install the application for systemwide use (OVERWRITES the configuration)"
 task :install do
   ctoolu_install SYSTEM_DIRS
+end
+
+desc "Run the application from the working copy"
+task :run do
+  sh 'XDG_CONFIG_HOME=`pwd`/config XDG_DATA_HOME=`pwd`/data ./ctoolu'
 end
 
 # FIXME, this is not exactly following 
@@ -48,6 +53,7 @@ def ctoolu_install(dirs)
 
   dir_install "ctoolu", dirs.bin, :mode => 0755, :pkill => true
   dir_install "ctoolu.desktop", dirs.xdg_config + "/autostart"
+  dir_install "config/ctoolu.yaml", dirs.xdg_config
   Dir.glob("data/ctoolu/*.yaml") do |rule|
     dir_install rule, dirs.xdg_data + "/ctoolu"
   end

@@ -5,6 +5,16 @@ patterns in the clipboard text and pops up menus to execute actions.
 It is inspired by http://en.wikipedia.org/wiki/Klipper but aims to be
 more modular in its configuration.
 
+## Usage
+
+Ensure ctoolu is launched either manually or via `ctoolu.desktop` by
+restarting your desktop session.  When text which matches one of the
+pattern is copied to the clipboard, you will see a popup menu.
+
+Edit `ctoolu.yaml` to have it watch the primary selection instead of
+the clipboard, or to switch from automatic to explicit activation via
+`ctoolu-activate`.
+
 ## Examples of patterns:
 
 - bnc#778347   https://bugzilla.novell.com/show_bug.cgi?id=778347
@@ -25,16 +35,10 @@ https://github.com/mvidner/ctoolu
 or
     rake install_user
 
-It will install clipboard-relay on the session D-Bus and set up ctoolu for
+It will install `clipboard-relay` on the session D-Bus and set up ctoolu for
 session autostart.
 
 *FIXME* it will overwrite the configuration file if it is already installed.
-
-## Usage
-
-Ensure ctoolu is launched either manually or via ctoolu.desktop by
-restarting your desktop session.  When text which matches one of the
-pattern is copied to the clipboard, you will see a popup menu.
 
 ## Requirements
 
@@ -49,4 +53,4 @@ pattern is copied to the clipboard, you will see a popup menu.
 
 ## License
 
-GPLv2
+[GPL-2.0](http://www.spdx.org/licenses/GPL-2.0)
