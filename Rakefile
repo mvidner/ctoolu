@@ -1,13 +1,14 @@
 # -*- ruby-*-
 
 require 'ostruct'
+require 'pathname'
 
-desc "Install the application for this user (OVERWRITES the configuration)"
+desc "Install the application for this user"
 task :install_user do
   ctoolu_install USER_DIRS
 end
 
-desc "Install the application for systemwide use (OVERWRITES the configuration)"
+desc "Install the application for systemwide use"
 task :install do
   ctoolu_install SYSTEM_DIRS
 end
@@ -35,10 +36,23 @@ SYSTEM_DIRS = {
 # but assumes the target is a directory and ensures it exists
 # Option :pkill will kill the program that was installed
 # (assuming it will get restarted somehow)
+# Option :config will take care not to overwrite an existing file,
+#   appending .new to the installed one.
 def dir_install(source, target_dir, options={})
   pkill = options.delete :pkill
+  config = options.delete :config
+
   mkdir_p target_dir, options.merge({:mode => nil})
-  install source, target_dir, options
+  
+  target = target_dir
+  if config
+    target << '/' << Pathname.new(source).basename
+    if File.exist? target
+      target << ".new"
+    end
+  end
+  install source, target, options
+
   if pkill
     # Pkill never kills itself, good.
     # The variable references ensure it doesn't kill its parent shell, duh.
@@ -54,7 +68,7 @@ def ctoolu_install(dirs)
   dir_install "ctoolu", dirs.bin, :mode => 0755, :pkill => true
   dir_install "ctoolu-activate", dirs.bin, :mode => 0755
   dir_install "ctoolu.desktop", dirs.xdg_config + "/autostart"
-  dir_install "config/ctoolu.yaml", dirs.xdg_config
+  dir_install "config/ctoolu.yaml", dirs.xdg_config, :config => true
   Dir.glob("data/ctoolu/*.yaml") do |rule|
     dir_install rule, dirs.xdg_data + "/ctoolu"
   end
