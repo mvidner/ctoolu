@@ -174,11 +174,16 @@ class Ctoolu < DBus::Object
 
   dbus_interface "net.vidner.Ctoolu" do
     dbus_method :Activate do
-      clipboard_changed($clipboard.Get[0])
+      look($clipboard.Get[0])
+    end
+
+    # ruby-dbus will one day translate MethodNames to method_names automatically
+    dbus_method :Look, "in text:s" do |text|
+      look(text)
     end
   end
 
-  def clipboard_changed(text)
+  def look(text)
     menu = CtooluMenu.new
     @actions.each do |action|
       match_data = action.pattern.match(text)
@@ -222,7 +227,7 @@ clipboard.default_iface = "net.vidner.ClipboardRelay"
 if CtooluConfig.auto_activate
   # FIXME there is no ProxyObject#interfacce
   # FIXME ProxyObjectInterface#on_signal does not mimic ProxyObject#on_signal
-  clipboard.on_signal("Changed") { |text| ctoolu.clipboard_changed(text) }
+  clipboard.on_signal("Changed") { |text| ctoolu.look(text) }
 end
 $clipboard = clipboard
 

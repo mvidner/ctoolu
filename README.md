@@ -8,8 +8,11 @@ more modular in its configuration.
 ## Usage
 
 Ensure ctoolu is launched either manually or via `ctoolu.desktop` by
-restarting your desktop session.  When text which matches one of the
-pattern is copied to the clipboard, you will see a popup menu.
+restarting your desktop session.
+
+When text which matches one of the patterns is copied to the clipboard, you
+will see a popup menu. You can also sidestep the clipboard via
+`ctoolu-activate "TEXT"`
 
 ## Examples of patterns:
 

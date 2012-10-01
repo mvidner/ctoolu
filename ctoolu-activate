@@ -1,4 +1,25 @@
 #!/bin/sh
+if [ "$1" = -h -o "$1" = --help ]; then
+    echo "Usage:"
+    echo "$0 (-h|--help)"
+    echo "$0 [-d|--debug] [STRING]"
+    echo "  Have Ctoolu look at STRING. If omitted, it looks at"
+    echo "  its configured clipboard (text_source)."
+    echo "Options:"
+    echo "  -d|--debug  Prints dbus-send reply."
+    exit
+elif [ "$1" = -d -o "$1" = --debug ]; then
+    DEBUG=1
+    shift
+fi
 
-dbus-send --type=method_call --dest=net.vidner.Ctoolu \
-    /net/vidner/Ctoolu net.vidner.Ctoolu.Activate
+if [ -n "$1" ]; then
+    METHOD=Look
+    ARGS=("string:$1")
+else
+    METHOD=Activate
+    ARGS=()
+fi
+
+dbus-send --type=method_call ${DEBUG+--print-reply} --dest=net.vidner.Ctoolu \
+    /net/vidner/Ctoolu net.vidner.Ctoolu.$METHOD "${ARGS[@]}"
