@@ -1,7 +1,7 @@
 - !ruby/struct:CtooluAction 
-  label: Novell Feature
+  label: SUSE Feature
   pattern: !ruby/regexp /(?:fate|feature) ?[#-]?(\d+)/i
-  url: https://fate.novell.com/%s
+  url: https://fate.suse.com/%s
 - !ruby/struct:CtooluAction 
   label: SUSE SWAMP ID
   pattern: !ruby/regexp /(?:maint:running:|swamp ?[#-]?)(\d+)/i
