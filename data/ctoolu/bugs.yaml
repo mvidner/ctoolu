@@ -12,5 +12,5 @@
   url: https://bugs.freedesktop.org/show_bug.cgi?id=%s
 - !ruby/struct:CtooluAction 
   label: Launchpad
-  pattern: !ruby/regexp /lp ?[#-]?(\d+)/i
+  pattern: !ruby/regexp /lp:? ?[#-]?(\d+)/i
   url: https://bugs.launchpad.net/bugs/%s

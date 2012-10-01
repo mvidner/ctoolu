@@ -17,7 +17,7 @@ pattern is copied to the clipboard, you will see a popup menu.
 - kde#273792   https://bugs.kde.org/show_bug.cgi?id=273792
 - bgo#597386   https://bugzilla.gnome.org/show_bug.cgi?id=597386
 - fdo#34070    https://bugs.freedesktop.org/show_bug.cgi?id=34070
-- lp#920197    https://bugs.launchpad.net/bugs/920197
+- LP: #920197  https://bugs.launchpad.net/bugs/920197
 - fate#100011  https://features.opensuse.org/100011
 
 ## Get it
