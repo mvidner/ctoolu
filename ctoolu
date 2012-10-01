@@ -91,11 +91,12 @@ class CtooluMenu
     end
     @seen_group = true
 
-    add_item(label, &action)
+    add_item(label, false, &action)
   end
 
-  def add_item(label, &action)
+  def add_item(label, sensitive = true, &action)
     item = Gtk::MenuItem.new(label)
+    item.sensitive = sensitive
     item.signal_connect("activate", &action)
     @menu.append item
   end
