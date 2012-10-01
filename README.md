@@ -2,7 +2,7 @@
 
 Ctoolu (Clipboard Tool, Universal, pronounced "cthulhu") matches
 patterns in the clipboard text and pops up menus to execute actions.
-It is inspired by http://en.wikipedia.org/wiki/Klipper but aims to be
+It is inspired by [Klipper](http://en.wikipedia.org/wiki/Klipper) but aims to be
 more modular in its configuration.
 
 ## Usage
@@ -25,7 +25,7 @@ will see a popup menu. You can also sidestep the clipboard via
 
 ## Get it
 
-https://github.com/mvidner/ctoolu
+<https://github.com/mvidner/ctoolu>
 
 ## Requirements
 
@@ -65,7 +65,7 @@ installations).  See the existing files for example syntax.
 
 ## Support / known issues
 
-Please visit https://github.com/mvidner/ctoolu/issues to see known
+Please visit <https://github.com/mvidner/ctoolu/issues> to see known
 issues and report new issues or feature requests.
 
 ## License
