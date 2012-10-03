@@ -5,7 +5,7 @@ require 'gtk2'
 require 'pathname'
 require 'yaml'
 
-HOME = ENV['HOME']
+require 'ctoolu/xdg_basedir'
 
 # actual url is constructed as url % pattern.match(text).captures
 CtooluAction = Struct.new :label, :pattern, :url, :commands
@@ -31,39 +31,6 @@ class CtooluCommand < Struct.new :label, :command, :keep_output
     end
   end
 end
-
-# "X Desktop Group" is a former name of freedesktop.org.
-# API modeled after python-xdg, because xdg.gem sucks.
-module XDG
-  XDG_DATA_HOME = ENV.fetch('XDG_DATA_HOME', "#{HOME}/.local/share")
-  XDG_DATA_DIRS = [XDG_DATA_HOME] +
-    ENV.fetch('XDG_DATA_DIRS', '/usr/local/share:/usr/share').split(':')
-
-  XDG_CONFIG_HOME = ENV.fetch('XDG_CONFIG_HOME', "#{HOME}/.config")
-  XDG_CONFIG_DIRS = [XDG_CONFIG_HOME] +
-    ENV.fetch('XDG_CONFIG_DIRS', '/etc/xdg').split(':')
-
-  # @return [Array<String>] paths
-  def load_data_paths(resource)
-    paths = XDG_DATA_DIRS.map { |dir| Pathname.new(dir) + resource }
-    paths.select { |p| p.absolute? && p.exist? }
-  end
-  module_function :load_data_paths
-
-  # @return [Array<String>] paths
-  def load_config_paths(resource)
-    paths = XDG_CONFIG_DIRS.map { |dir| Pathname.new(dir) + resource }
-    paths.select { |p| p.absolute? && p.exist? }
-  end
-  module_function :load_config_paths
-
-  # @return [String, nil]
-  def load_first_config(resource)
-    # correctly returns nil for an empty list
-    load_config_paths(resource).first
-  end
-  module_function :load_first_config
-end # module XDG
 
 # USAGE:
 # m = CtooluMenu.new

@@ -15,7 +15,7 @@ end
 
 desc "Run the application from the working copy"
 task :run do
-  sh 'XDG_CONFIG_HOME=`pwd`/config XDG_DATA_HOME=`pwd`/data ./ctoolu'
+  sh 'XDG_CONFIG_HOME=`pwd`/config XDG_DATA_HOME=`pwd`/data RUBYLIB=lib ./ctoolu'
 end
 
 # FIXME, this is not exactly following 
