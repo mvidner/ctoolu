@@ -46,7 +46,7 @@ def dir_install(source, target_dir, options={})
   
   target = target_dir
   if config
-    target << '/' << Pathname.new(source).basename
+    target << '/' << Pathname.new(source).basename.to_s
     if File.exist? target
       target << ".new"
     end
