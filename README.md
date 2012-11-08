@@ -48,8 +48,15 @@ or for the current user via:
 
     rake install_user
 
-It will install `clipboard-relay` on the session D-Bus and set up ctoolu for
+It will install the various executables and configuration files, set
+up a ClipboardRelay service on the session dbus, and set up ctoolu for
 session autostart.
+
+## Usage
+
+Run `ctoolu` either by logging out and in again, or via:
+
+    rake run
 
 ## Configuration
 
