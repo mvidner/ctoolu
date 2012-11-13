@@ -189,7 +189,7 @@ class Ctoolu < DBus::Object
       match_data = action.pattern.match(text)
       next unless match_data
 
-      menu.add_group(action.label) do
+      menu.add_group("#{action.label} (#{match_data})") do
         action.url ||= "%s"
         $clipboard.Set(action.url % match_data.captures)
       end
