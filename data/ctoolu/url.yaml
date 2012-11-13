@@ -4,4 +4,4 @@
   commands: 
   - !ruby/struct:CtooluCommand 
     label: Open in browser (xdg-open)
-    command: xdg-open %s
+    command: xdg-open '%s'
