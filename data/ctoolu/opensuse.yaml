@@ -2,6 +2,10 @@
   label: Bugzilla.Novell.com
   pattern: !ruby/regexp /(?:bnc|bug) ?[#-]?(\d+)/i
   url: https://bugzilla.novell.com/show_bug.cgi?id=%s
+- !ruby/struct:CtooluAction
+  label: GitHub Issue/PR
+  pattern: !ruby/regexp /gh#([^\/]+\/[^\/#]+)#(\d+)/i
+  url: https://github.com/%s/issue/%s
 - !ruby/struct:CtooluAction 
   label: openSUSE Feature
   pattern: !ruby/regexp /(?:fate|feature) ?[#-]?(\d+)/i
