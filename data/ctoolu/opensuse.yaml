@@ -15,6 +15,14 @@
   pattern: !ruby/regexp /(?:SR|request id) ?[#-]?(\d+)/i
   url:   https://build.opensuse.org/request/show/%s
 - !ruby/struct:CtooluAction 
+  label: OBS Submit Request
+  pattern: !ruby/regexp "/submit request: (\\d+)/i"
+  url:   https://build.opensuse.org/request/show/%s
+- !ruby/struct:CtooluAction 
+  label: OBS Submit Request (osc rq)
+  pattern: !ruby/regexp /(\d+) +State:/
+  url:   https://build.opensuse.org/request/show/%s
+- !ruby/struct:CtooluAction 
   label: BNC Bug URL
   pattern: !ruby/regexp /(https?:\/\/bugzilla.novell.com\/show_bug.cgi\?id=\d+)/
   commands: 
