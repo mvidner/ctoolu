@@ -1,4 +1,4 @@
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: HTTP URL
   pattern: !ruby/regexp /(https?:\/\/\S+)/
   commands: 

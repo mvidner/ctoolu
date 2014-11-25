@@ -1,4 +1,4 @@
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: Bugzilla.openSUSE.org
   pattern: !ruby/regexp /boo ?[#-]?(\d+)/i
   url: https://bugzilla.opensuse.org/show_bug.cgi?id=%s
@@ -6,23 +6,23 @@
   label: GitHub Issue/PR
   pattern: !ruby/regexp /gh#([^\/]+\/[^\/#]+)#(\d+)/i
   url: https://github.com/%s/issues/%s
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: openSUSE Feature
   pattern: !ruby/regexp /(?:fate|feature) ?[#-]?(\d+)/i
   url: https://features.opensuse.org/%s
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: OBS Submit Request
   pattern: !ruby/regexp /(?:SR|request id) ?[#-]?(\d+)/i
   url:   https://build.opensuse.org/request/show/%s
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: OBS Submit Request
   pattern: !ruby/regexp "/submit request: (\\d+)/i"
   url:   https://build.opensuse.org/request/show/%s
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: OBS Submit Request (osc rq)
   pattern: !ruby/regexp /(\d+) +State:/
   url:   https://build.opensuse.org/request/show/%s
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: BNC Bug URL
   pattern: !ruby/regexp /(https?:\/\/bugzilla.novell.com\/show_bug.cgi\?id=\d+)/
   commands: 
@@ -33,7 +33,7 @@
   - !ruby/struct:CtooluCommand 
     label: edit notes
     command: bug_notes %s
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: BNC Attachment URL
   pattern: !ruby/regexp /(https?:\/\/bugzilla.novell.com\/attachment.cgi\?id=\d+)/
   commands: 
@@ -41,11 +41,11 @@
     label: Buglog
     command: buglog %s
     keep_output: false
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: openSUSE BuildService Project
   pattern: !ruby/regexp /\A([[:alpha:]][^[:space:]/]+(?::[^[:space:]/]+)+)\Z/
   url: https://build.opensuse.org/project/show?project=%s
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: SVN plain URL
   pattern: !ruby/regexp /\Ahttp://svn.opensuse.org/svn/(\S+)\Z/
   commands: 

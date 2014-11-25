@@ -1,28 +1,28 @@
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: Bugzilla.SUSE.com
   pattern: !ruby/regexp /(?:bsc|bnc|bug) ?[#-]?(\d+)/i
   url: https://bugzilla.suse.com/show_bug.cgi?id=%s
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: SUSE Feature
   pattern: !ruby/regexp /(?:fate|feature) ?[#-]?(\d+)/i
   url: https://fate.suse.com/%s
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: SUSE SWAMP ID
   pattern: !ruby/regexp /(?:maint:running:|swamp ?[#-]?)(\d+)/i
   url: https://swamp.suse.de/webswamp/wf/%s
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: IBS Submit Request
   pattern: !ruby/regexp /(?:SR|request id) ?[#-]?(\d+)/i
   url:   https://build.suse.de/request/show/%s
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: IBS Submit Request
   pattern: !ruby/regexp "/submit request: (\\d+)/i"
   url:   https://build.suse.de/request/show/%s
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: IBS Submit Request (osc rq)
   pattern: !ruby/regexp /(\d+) +State:/
   url:   https://build.suse.de/request/show/%s
-- !ruby/struct:CtooluAction 
+- !ruby/struct:CtooluAction
   label: IBS Project
   pattern: !ruby/regexp /\A([[:alpha:]][^[:space:]/]+(?::[^[:space:]/]+)+)\Z/
   url: https://build.suse.de/project/show?project=%s
