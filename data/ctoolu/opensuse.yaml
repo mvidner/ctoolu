@@ -1,7 +1,7 @@
 - !ruby/struct:CtooluAction 
-  label: Bugzilla.Novell.com
-  pattern: !ruby/regexp /(?:bnc|bug) ?[#-]?(\d+)/i
-  url: https://bugzilla.novell.com/show_bug.cgi?id=%s
+  label: Bugzilla.openSUSE.org
+  pattern: !ruby/regexp /boo ?[#-]?(\d+)/i
+  url: https://bugzilla.opensuse.org/show_bug.cgi?id=%s
 - !ruby/struct:CtooluAction
   label: GitHub Issue/PR
   pattern: !ruby/regexp /gh#([^\/]+\/[^\/#]+)#(\d+)/i

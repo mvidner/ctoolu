@@ -1,4 +1,8 @@
 - !ruby/struct:CtooluAction 
+  label: Bugzilla.SUSE.com
+  pattern: !ruby/regexp /(?:bsc|bnc|bug) ?[#-]?(\d+)/i
+  url: https://bugzilla.suse.com/show_bug.cgi?id=%s
+- !ruby/struct:CtooluAction 
   label: SUSE Feature
   pattern: !ruby/regexp /(?:fate|feature) ?[#-]?(\d+)/i
   url: https://fate.suse.com/%s
