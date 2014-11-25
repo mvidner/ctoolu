@@ -25,19 +25,19 @@
 - !ruby/struct:CtooluAction
   label: BNC Bug URL
   pattern: !ruby/regexp /(https?:\/\/bugzilla.novell.com\/show_bug.cgi\?id=\d+)/
-  commands: 
-  - !ruby/struct:CtooluCommand 
+  commands:
+  - !ruby/struct:CtooluCommand
     label: bug_summary
     command: bug_summary %s
     keep_output: true
-  - !ruby/struct:CtooluCommand 
+  - !ruby/struct:CtooluCommand
     label: edit notes
     command: bug_notes %s
 - !ruby/struct:CtooluAction
   label: BNC Attachment URL
   pattern: !ruby/regexp /(https?:\/\/bugzilla.novell.com\/attachment.cgi\?id=\d+)/
-  commands: 
-  - !ruby/struct:CtooluCommand 
+  commands:
+  - !ruby/struct:CtooluCommand
     label: Buglog
     command: buglog %s
     keep_output: false
@@ -48,8 +48,8 @@
 - !ruby/struct:CtooluAction
   label: SVN plain URL
   pattern: !ruby/regexp /\Ahttp://svn.opensuse.org/svn/(\S+)\Z/
-  commands: 
-  - !ruby/struct:CtooluCommand 
+  commands:
+  - !ruby/struct:CtooluCommand
     label: make ViewVC URL
     command: echo http://svn.opensuse.org/viewvc/%s
     keep_output: true
