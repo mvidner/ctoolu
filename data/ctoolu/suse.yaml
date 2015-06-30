@@ -2,6 +2,15 @@
   label: Bugzilla.SUSE.com
   pattern: !ruby/regexp /(?:bsc|bnc|bug) ?[#-]?(\d+)/i
   url: https://bugzilla.suse.com/show_bug.cgi?id=%s
+  commands:
+  - !ruby/struct:CtooluCommand
+    label: make Markdown link
+    command: echo '[bsc#%1$s](https://bugzilla.suse.com/show_bug.cgi?id=%1$s)'
+    keep_output: true
+  - !ruby/struct:CtooluCommand
+    label: make HTML link
+    command: echo '<a href="https://bugzilla.suse.com/show_bug.cgi?id=%1$s">bsc#%1$s</a>'
+    keep_output: true
 - !ruby/struct:CtooluAction
   label: SUSE Feature
   pattern: !ruby/regexp /(?:fate|feature) ?[#-]?(\d+)/i

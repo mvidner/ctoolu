@@ -2,6 +2,15 @@
   label: Bugzilla.openSUSE.org
   pattern: !ruby/regexp /boo ?[#-]?(\d+)/i
   url: https://bugzilla.opensuse.org/show_bug.cgi?id=%s
+  commands:
+  - !ruby/struct:CtooluCommand
+    label: make Markdown link
+    command: echo '[boo#%1$s](https://bugzilla.opensuse.org/show_bug.cgi?id=%1$s)'
+    keep_output: true
+  - !ruby/struct:CtooluCommand
+    label: make HTML link
+    command: echo '<a href="https://bugzilla.opensuse.org/show_bug.cgi?id=%1$s">boo#%1$s</a>'
+    keep_output: true
 - !ruby/struct:CtooluAction
   label: GitHub Issue/PR
   pattern: !ruby/regexp /gh#([^\/]+\/[^\/#]+)#(\d+)/i
