@@ -5,3 +5,6 @@
   - !ruby/struct:CtooluCommand
     label: Open in browser (xdg-open)
     command: xdg-open '%s'
+  - !ruby/struct:CtooluCommand
+    label: Open in Private FF
+    command: firefox --private-window '%s'

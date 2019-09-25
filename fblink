@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+require "uri"
+
+s = ARGV[0] || $stdin.read.chomp
+
+u = URI.parse(s)
+if u.host == "l.facebook.com"
+  uval = u.query.split('&').map{|a| a.split('=')}.find{|k,v| k == 'u'}.last
+  s = URI.unescape(uval)
+  u = URI.parse(s)
+end
+# puts u
+qhash = u.query.split('&').map{|a| a.split('=')}.to_h
+qhash.delete "fbclid"
+q = qhash.map{|k,v| "#{k}=#{v}"}.join("&")
+u.query = q == "" ? nil : q
+puts u.to_s

@@ -1,0 +1,16 @@
+- !ruby/struct:CtooluAction
+  label: Facebook link
+  pattern: !ruby/regexp /(https:\/\/l\.facebook\.com\/\S*)/
+  commands:
+  - !ruby/struct:CtooluCommand
+    label: Strip tracking
+    command: fblink '%s'
+    keep_output: true
+- !ruby/struct:CtooluAction
+  label: Facebook tracking
+  pattern: !ruby/regexp /(https?:\/\/\S*[?&]fbclid=\S*)/
+  commands:
+  - !ruby/struct:CtooluCommand
+    label: Strip tracking
+    command: fblink '%s'
+    keep_output: true
