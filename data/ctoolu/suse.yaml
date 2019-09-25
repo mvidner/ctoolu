@@ -34,4 +34,4 @@
 - !ruby/struct:CtooluAction
   label: IBS Project
   pattern: !ruby/regexp /\A([[:alpha:]][^[:space:]/]+(?::[^[:space:]/]+)+)\Z/
-  url: https://build.suse.de/project/show?project=%s
+  url: https://build.suse.de/project/show/%s

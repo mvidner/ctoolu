@@ -53,7 +53,7 @@
 - !ruby/struct:CtooluAction
   label: openSUSE BuildService Project
   pattern: !ruby/regexp /\A([[:alpha:]][^[:space:]/]+(?::[^[:space:]/]+)+)\Z/
-  url: https://build.opensuse.org/project/show?project=%s
+  url: https://build.opensuse.org/project/show/%s
 - !ruby/struct:CtooluAction
   label: SVN plain URL
   pattern: !ruby/regexp /\Ahttp://svn.opensuse.org/svn/(\S+)\Z/
