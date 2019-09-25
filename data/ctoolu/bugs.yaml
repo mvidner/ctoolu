@@ -2,6 +2,11 @@
   label: Bugs.KDE.org
   pattern: !ruby/regexp /kde ?[#-]?(\d{2,})/i
   url: https://bugs.kde.org/show_bug.cgi?id=%s
+  # let's rephrase "pattern" in a language neutral way:
+  # POSIX Extended Regular Expression
+  regex: "KDE[ -]?#?([[:digit:]]{2,})"
+  # this is the default
+  case_sensitive: false
 - !ruby/struct:CtooluAction
   label: Bugzilla.GNOME.org
   pattern: !ruby/regexp /bgo ?[#-]?(\d+)/i
