@@ -22,3 +22,11 @@
     label: Strip tracking
     command: fblink '%s'
     keep_output: true
+- !ruby/struct:CtooluAction
+  label: Twitter Link
+  pattern: !ruby/regexp /(https:\/\/t\.co\/\S*)/
+  commands:
+  - !ruby/struct:CtooluCommand
+    label: Strip tracking
+    command: fblink '%s'
+    keep_output: true
