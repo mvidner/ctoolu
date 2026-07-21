@@ -1,4 +1,3 @@
-- !ruby/struct:CtooluAction
-  label: YaST SVN revision
-  pattern: !ruby/regexp /\A(?:Committed revision |r)([[:digit:]]+)\Z/
+- label: YaST SVN revision
+  regex: '^(?:Committed revision |r)([[:digit:]]+)$'
   url: http://svn.opensuse.org/viewvc/yast?view=revision&revision=%s

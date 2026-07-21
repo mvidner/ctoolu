@@ -1,21 +1,16 @@
-- !ruby/struct:CtooluAction
-  label: Bugs.KDE.org
-  pattern: !ruby/regexp /kde ?[#-]?(\d{2,})/i
+- label: Bugs.KDE.org
+  regex: 'kde ?[#-]?([[:digit:]]{2,})'
   url: https://bugs.kde.org/show_bug.cgi?id=%s
-  # let's rephrase "pattern" in a language neutral way:
-  # POSIX Extended Regular Expression
-  regex: "KDE[ -]?#?([[:digit:]]{2,})"
-  # this is the default
   case_sensitive: false
-- !ruby/struct:CtooluAction
-  label: Bugzilla.GNOME.org
-  pattern: !ruby/regexp /bgo ?[#-]?(\d+)/i
+- label: Bugzilla.GNOME.org
+  regex: 'bgo ?[#-]?([[:digit:]]+)'
   url: https://bugzilla.gnome.org/show_bug.cgi?id=%s
-- !ruby/struct:CtooluAction
-  label: Bugs.FreeDesktop.org
-  pattern: !ruby/regexp /fdo ?[#-]?(\d+)/i
+  case_sensitive: false
+- label: Bugs.FreeDesktop.org
+  regex: 'fdo ?[#-]?([[:digit:]]+)'
   url: https://bugs.freedesktop.org/show_bug.cgi?id=%s
-- !ruby/struct:CtooluAction
-  label: Launchpad
-  pattern: !ruby/regexp /lp:? ?[#-]?(\d+)/i
+  case_sensitive: false
+- label: Launchpad
+  regex: 'lp:? ?[#-]?([[:digit:]]+)'
   url: https://bugs.launchpad.net/bugs/%s
+  case_sensitive: false

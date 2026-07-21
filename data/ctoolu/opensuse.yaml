@@ -1,64 +1,53 @@
-- !ruby/struct:CtooluAction
-  label: Bugzilla.openSUSE.org
-  pattern: !ruby/regexp /boo ?[#-]?(\d+)/i
+- label: Bugzilla.openSUSE.org
+  regex: 'boo ?[#-]?([[:digit:]]+)'
   url: https://bugzilla.opensuse.org/show_bug.cgi?id=%s
+  case_sensitive: false
   commands:
-  - !ruby/struct:CtooluCommand
-    label: make Markdown link
+  - label: make Markdown link
     command: echo '[boo#%1$s](https://bugzilla.opensuse.org/show_bug.cgi?id=%1$s)'
     keep_output: true
-  - !ruby/struct:CtooluCommand
-    label: make HTML link
+  - label: make HTML link
     command: echo '<a href="https://bugzilla.opensuse.org/show_bug.cgi?id=%1$s">boo#%1$s</a>'
     keep_output: true
-- !ruby/struct:CtooluAction
-  label: GitHub Issue/PR
-  pattern: !ruby/regexp /gh#([^\/]+\/[^\/#]+)#(\d+)/i
+- label: GitHub Issue/PR
+  regex: 'gh#([^/]+/[^/#]+)#([[:digit:]]+)'
   url: https://github.com/%s/issues/%s
-- !ruby/struct:CtooluAction
-  label: openSUSE Feature
-  pattern: !ruby/regexp /(?:fate|feature) ?[#-]?(\d+)/i
+  case_sensitive: false
+- label: openSUSE Feature
+  regex: '(?:fate|feature) ?[#-]?([[:digit:]]+)'
   url: https://features.opensuse.org/%s
-- !ruby/struct:CtooluAction
-  label: OBS Submit Request
-  pattern: !ruby/regexp /(?:SR|request id) ?[#-]?(\d+)/i
-  url:   https://build.opensuse.org/request/show/%s
-- !ruby/struct:CtooluAction
-  label: OBS Submit Request
-  pattern: !ruby/regexp "/submit request: (\\d+)/i"
-  url:   https://build.opensuse.org/request/show/%s
-- !ruby/struct:CtooluAction
-  label: OBS Submit Request (osc rq)
-  pattern: !ruby/regexp /(\d+) +State:/
-  url:   https://build.opensuse.org/request/show/%s
-- !ruby/struct:CtooluAction
-  label: BNC Bug URL
-  pattern: !ruby/regexp /(https?:\/\/bugzilla.novell.com\/show_bug.cgi\?id=\d+)/
+  case_sensitive: false
+- label: OBS Submit Request
+  regex: '(?:SR|request id) ?[#-]?([[:digit:]]+)'
+  url: https://build.opensuse.org/request/show/%s
+  case_sensitive: false
+- label: OBS Submit Request
+  regex: 'submit request: ([[:digit:]]+)'
+  url: https://build.opensuse.org/request/show/%s
+  case_sensitive: false
+- label: OBS Submit Request (osc rq)
+  regex: '([[:digit:]]+) +State:'
+  url: https://build.opensuse.org/request/show/%s
+- label: BNC Bug URL
+  regex: '(https?://bugzilla.novell.com/show_bug.cgi\?id=[[:digit:]]+)'
   commands:
-  - !ruby/struct:CtooluCommand
-    label: bug_summary
+  - label: bug_summary
     command: bug_summary %s
     keep_output: true
-  - !ruby/struct:CtooluCommand
-    label: edit notes
+  - label: edit notes
     command: bug_notes %s
-- !ruby/struct:CtooluAction
-  label: BNC Attachment URL
-  pattern: !ruby/regexp /(https?:\/\/bugzilla.novell.com\/attachment.cgi\?id=\d+)/
+- label: BNC Attachment URL
+  regex: '(https?://bugzilla.novell.com/attachment.cgi\?id=[[:digit:]]+)'
   commands:
-  - !ruby/struct:CtooluCommand
-    label: Buglog
+  - label: Buglog
     command: buglog %s
     keep_output: false
-- !ruby/struct:CtooluAction
-  label: openSUSE BuildService Project
-  pattern: !ruby/regexp /\A([[:alpha:]][^[:space:]/]+(?::[^[:space:]/]+)+)\Z/
+- label: openSUSE BuildService Project
+  regex: '^([[:alpha:]][^[:space:]/]+(:[^[:space:]/]+)+)$'
   url: https://build.opensuse.org/project/show/%s
-- !ruby/struct:CtooluAction
-  label: SVN plain URL
-  pattern: !ruby/regexp /\Ahttp://svn.opensuse.org/svn/(\S+)\Z/
+- label: SVN plain URL
+  regex: '^http://svn.opensuse.org/svn/([^[:space:]]+)$'
   commands:
-  - !ruby/struct:CtooluCommand
-    label: make ViewVC URL
+  - label: make ViewVC URL
     command: echo http://svn.opensuse.org/viewvc/%s
     keep_output: true

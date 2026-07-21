@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ctoolu"
+version = "2.0.0"
+description = "Clipboard Tool, Universal - watches clipboard for patterns and offers actions"
+requires-python = ">=3.8"
+dependencies = [
+    "PyQt5",
+    "PyYAML",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+]
+
+[project.scripts]
+ctoolu = "ctoolu.main:main"
+ctoolu-activate = "ctoolu.activate:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["ctoolu"]
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.coverage.html]
+directory = "htmlcov"

@@ -1,10 +1,7 @@
-- !ruby/struct:CtooluAction
-  label: HTTP URL
-  pattern: !ruby/regexp /(https?:\/\/\S+)/
+- label: HTTP URL
+  regex: '(https?://[^[:space:]]+)'
   commands:
-  - !ruby/struct:CtooluCommand
-    label: Open in browser (xdg-open)
+  - label: Open in browser (xdg-open)
     command: xdg-open '%s'
-  - !ruby/struct:CtooluCommand
-    label: Open in Private FF
+  - label: Open in Private FF
     command: firefox --private-window '%s'

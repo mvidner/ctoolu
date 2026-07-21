@@ -1,32 +1,24 @@
-- !ruby/struct:CtooluAction
-  label: Facebook link
-  pattern: !ruby/regexp /(https:\/\/l\.facebook\.com\/\S*)/
+- label: Facebook link
+  regex: '(https://l\.facebook\.com/[^[:space:]]*)'
   commands:
-  - !ruby/struct:CtooluCommand
-    label: Strip tracking
+  - label: Strip tracking
     command: fblink '%s'
     keep_output: true
-- !ruby/struct:CtooluAction
-  label: Facebook tracking
-  pattern: !ruby/regexp /(https?:\/\/\S*[?&]fbclid=\S*)/
+- label: Facebook tracking
+  regex: '(https?://[^[:space:]]*[?&]fbclid=[^[:space:]]*)'
   commands:
-  - !ruby/struct:CtooluCommand
-    label: Strip tracking
+  - label: Strip tracking
     command: fblink '%s'
     keep_output: true
-- !ruby/struct:CtooluAction
-  label: Google News link
-  pattern: !ruby/regexp /(https:\/\/news\.google\.com\/\S*)/
+- label: Google News link
+  regex: '(https://news\.google\.com/[^[:space:]]*)'
   commands:
-  - !ruby/struct:CtooluCommand
-    label: Strip tracking
+  - label: Strip tracking
     command: fblink '%s'
     keep_output: true
-- !ruby/struct:CtooluAction
-  label: Twitter Link
-  pattern: !ruby/regexp /(https:\/\/t\.co\/\S*)/
+- label: Twitter Link
+  regex: '(https://t\.co/[^[:space:]]*)'
   commands:
-  - !ruby/struct:CtooluCommand
-    label: Strip tracking
+  - label: Strip tracking
     command: fblink '%s'
     keep_output: true
