@@ -9,6 +9,9 @@
   - label: make HTML link
     command: echo '<a href="https://bugzilla.suse.com/show_bug.cgi?id=%1$s">bsc#%1$s</a>'
     keep_output: true
+  - label: Fastzilla URL
+    command: echo 'https://fastzilla.suse.de/%s'
+    keep_output: true
 - label: SUSE Feature
   regex: '(?:fate|feature) ?[#-]?([[:digit:]]+)'
   url: https://fate.suse.com/%s
@@ -31,3 +34,6 @@
 - label: IBS Project
   regex: '^([[:alpha:]][^[:space:]/]+(:[^[:space:]/]+)+)$'
   url: https://build.suse.de/project/show/%s
+- label: Jira
+  regex: 'jsc#([[:alpha:]]+-[[:digit:]]+)'
+  url: https://jira.suse.com/browse/%s
