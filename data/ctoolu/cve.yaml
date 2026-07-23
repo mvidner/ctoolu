@@ -1,0 +1,8 @@
+- label: CVE
+  regex: '(CVE-[[:digit:]]+-[[:digit:]]+)'
+  url: https://nvd.nist.gov/vuln/detail/%s
+  case_sensitive: false
+  commands:
+  - label: Bugzilla URL
+    command: echo 'https://bugzilla.suse.com/show_bug.cgi?id=%s'
+    keep_output: true
