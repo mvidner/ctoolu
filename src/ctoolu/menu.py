@@ -6,6 +6,35 @@ from PyQt5.QtGui import QCursor
 from .actions import substitute
 
 
+def _add_mnemonic(label, used):
+    """Add a Qt mnemonic (``&`` prefix) to an unused letter in *label*.
+
+    Prefers word-initial letters, then falls back to any letter.
+    Modifies *used* in place by adding the chosen letter (lowercased).
+    Returns the label unchanged if no unique letter is available.
+
+    >>> used = set()
+    >>> _add_mnemonic('Open browser', used)
+    '&Open browser'
+    >>> _add_mnemonic('Open folder', used)
+    'Open &folder'
+    >>> _add_mnemonic('Copy text', used)
+    'Copy &text'
+    """
+    # First pass: try word-initial letters
+    for i, ch in enumerate(label):
+        if ch.isalpha() and (i == 0 or not label[i - 1].isalpha()) \
+                and ch.lower() not in used:
+            used.add(ch.lower())
+            return label[:i] + '&' + label[i:]
+    # Second pass: any letter
+    for i, ch in enumerate(label):
+        if ch.isalpha() and ch.lower() not in used:
+            used.add(ch.lower())
+            return label[:i] + '&' + label[i:]
+    return label
+
+
 def show_menu(matches, set_clipboard):
     """Show a popup menu for the matched actions.
 
@@ -18,6 +47,7 @@ def show_menu(matches, set_clipboard):
 
     menu = QMenu()
     first_group = True
+    used_mnemonics = set()
 
     for action, match in matches:
         if not first_group:
@@ -28,7 +58,9 @@ def show_menu(matches, set_clipboard):
         match_text = match.group(0)
 
         # Group header: clicking it sets the clipboard to the URL
-        header_label = f'{action.label} ({match_text})'
+        header_label = _add_mnemonic(
+            f'{action.label} ({match_text})', used_mnemonics,
+        )
         if action.url:
             url = substitute(action.url, captures)
             header_action = menu.addAction(header_label)
@@ -41,7 +73,8 @@ def show_menu(matches, set_clipboard):
 
         # Command items
         for cmd in action.commands:
-            cmd_action = menu.addAction(f'  {cmd.label}')
+            cmd_label = _add_mnemonic(f'  {cmd.label}', used_mnemonics)
+            cmd_action = menu.addAction(cmd_label)
             cmd_action.triggered.connect(
                 lambda checked, c=cmd, caps=captures: c.execute(caps, set_clipboard)
             )
