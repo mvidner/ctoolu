@@ -1,7 +1,7 @@
 """Main entry point for ctoolu."""
 
 import json
-import os
+import logging
 import signal
 import socket
 import sys
@@ -114,6 +114,14 @@ class Ctoolu(QObject):
 
 
 def main():
+    # Configure logging
+    log = logging.getLogger()
+    handler = logging.StreamHandler(sys.stderr)
+    handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+    log.addHandler(handler)
+    log.setLevel(logging.INFO)
+    logging.info("Ctoolu running")
+
     app = QApplication(sys.argv)
     # Don't quit when popup menu closes
     app.setQuitOnLastWindowClosed(False)

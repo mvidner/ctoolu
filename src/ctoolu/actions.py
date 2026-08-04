@@ -3,8 +3,9 @@
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-
 import yaml
+import os
+import logging
 
 from . import xdg
 
@@ -139,7 +140,7 @@ def _parse_action(data):
 
 
 def load_actions():
-    """Load all actions from XDG data directories.
+    """Load all actions from XDG and code-adjacent data directories
 
     Files in higher-priority directories (user) override lower-priority
     (system) ones with the same basename.
@@ -147,7 +148,10 @@ def load_actions():
     seen_basenames = set()
     actions = []
 
-    for data_dir in xdg.load_data_paths('ctoolu'):
+    here_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../data/ctoolu')
+    data_dirs = xdg.load_data_paths('ctoolu') + [here_dir]
+    logging.info(f"Data dirs: {data_dirs}")
+    for data_dir in data_dirs:
         for yaml_file in sorted(Path(data_dir).glob('*.yaml')):
             basename = yaml_file.name
             if basename in seen_basenames:
