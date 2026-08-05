@@ -148,7 +148,7 @@ def load_actions():
     seen_basenames = set()
     actions = []
 
-    here_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../data/ctoolu')
+    here_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data')
     data_dirs = xdg.load_data_paths('ctoolu') + [here_dir]
     logging.info(f"Data dirs: {data_dirs}")
     for data_dir in data_dirs:
@@ -158,6 +158,7 @@ def load_actions():
                 continue
 
             seen_basenames.add(basename)
+            logging.info(f"Data file: {yaml_file}")
             with open(yaml_file) as f:
                 file_actions = yaml.safe_load(f)
             if file_actions:
